@@ -1,5 +1,6 @@
 const webshot = require('webshot');
 const fs = require('fs');
+const adblock = require('./adblock');
 
 const websites = [
     {
@@ -19,16 +20,21 @@ const websites = [
     }
 ];
 
-module.exports = function() {
-    websites.forEach(site => {
-        const renderStream = webshot(site.domain);
-        const file = fs.createWriteStream(
-            `./public/images/screenshots/${site.key}/${new Date().getTime()}.png`,
-            {encoding: 'binary'}
-        );
+const webshotOptions = {
+    onLoadFinished: adblock
+};
 
-        renderStream.on('data', data => {
-            file.write(data.toString('binary'), 'binary');
-        });
-    });
+const takeScreenshotAndSave = site => {
+    webshot(
+        site.domain,
+        `./public/images/screenshots/${site.key}/${new Date().getTime()}.png`,
+        webshotOptions,
+        () => {
+            console.info(`Saved a screenshot of ${site.name}`);
+        }
+    );
+};
+
+module.exports = () => {
+    websites.forEach(takeScreenshotAndSave);
 };
