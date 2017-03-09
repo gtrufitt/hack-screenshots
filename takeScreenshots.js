@@ -19,14 +19,16 @@ const websites = [
     }
 ];
 
-websites.forEach(site => {
-    const renderStream = webshot(site.domain);
-    const file = fs.createWriteStream(
-        `./public/images/screenshots/${site.key}/${new Date().getTime()}.png`,
-        {encoding: 'binary'}
-    );
+module.exports = function() {
+    websites.forEach(site => {
+        const renderStream = webshot(site.domain);
+        const file = fs.createWriteStream(
+            `./public/images/screenshots/${site.key}/${new Date().getTime()}.png`,
+            {encoding: 'binary'}
+        );
 
-    renderStream.on('data', data => {
-        file.write(data.toString('binary'), 'binary');
+        renderStream.on('data', data => {
+            file.write(data.toString('binary'), 'binary');
+        });
     });
-});
+};
