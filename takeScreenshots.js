@@ -6,7 +6,7 @@ const websites = [
     {
         name: 'The Guardian',
         key: 'theguardian',
-        domain: 'https://www.theguardian.com'
+        domain: 'https://www.theguardian.com#noads'
     },
     {
         name: 'The Daily Mail',
